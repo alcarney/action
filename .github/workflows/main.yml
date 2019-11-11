@@ -28,6 +28,29 @@ jobs:
       run: |
         echo $VERSION
         
+    - name: Setup Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+        
+    - name: Setup Environment
+      run: |
+        python --version
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade tox
+        
+    - name: Build package
+      run: |
+        tox
+        
+    - name: Export Assets
+      run: |
+        whl=$(find dist/ -name '*.whl' -exec basename {} \;)
+        echo "::set-output name=WHL::$whl"
+        
+        src=$(find dist/ -name '*.tar.gz' -exec basename {} \;)
+        echo "::set-output name=SRC::$src"
+        
       # Based on: https://itnext.io/creating-a-github-action-to-tag-commits-2722f1560dec
     - name: Create Tag
       run: | 
@@ -46,6 +69,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Release
+      id: release
       uses: actions/create-release@v1.0.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -54,3 +78,23 @@ jobs:
         release_name: v${{ steps.info.outputs.VERSION}} - ${{ steps.info.outputs.RELEASE_DATE }}
         draft: true
         prerelease: false
+        
+    - name: Upload Release Asset 
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.release.outputs.upload_url }}
+        asset_path: dist/${{ steps.pkg.outputs.WHL }}
+        asset_name: ${{ steps.pkg.outputs.WHL }}
+        asset_content_type: application/octet-stream
+        
+    - name: Upload Release Asset 
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.release.outputs.upload_url }}
+        asset_path: dist/${{ steps.pkg.outputs.SRC }}
+        asset_name: ${{ steps.pkg.outputs.SRC }}
+        asset_content_type: application/octet-stream  
