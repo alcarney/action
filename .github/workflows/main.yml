@@ -40,9 +40,16 @@ jobs:
         python -m pip install --upgrade tox
         
     - name: Build package
-      id: pkg
       run: |
         tox
+        
+    - name: Export Assets
+      run: |
+        whl=$(find dist/ -name '*.whl' -exec basename {} \;)
+        echo "::set-output name=WHL::$whl"
+        
+        src=$(find dist/ -name '*.tar.gz' -exec basename {} \;)
+        echo "::set-output name=SRC::$src"
         
       # Based on: https://itnext.io/creating-a-github-action-to-tag-commits-2722f1560dec
     - name: Create Tag
@@ -78,6 +85,16 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.release.outputs.upload_url }}
-        asset_path: dist/${{ steps.pkg.outputs.whl }}
-        asset_name: ${{ steps.pkg.outputs.whl }}
+        asset_path: dist/${{ steps.pkg.outputs.WHL }}
+        asset_name: ${{ steps.pkg.outputs.WHL }}
         asset_content_type: application/octet-stream
+        
+    - name: Upload Release Asset 
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.release.outputs.upload_url }}
+        asset_path: dist/${{ steps.pkg.outputs.SRC }}
+        asset_name: ${{ steps.pkg.outputs.SRC }}
+        asset_content_type: application/octet-stream  
