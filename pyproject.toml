@@ -1,0 +1,5 @@
+[tool.towncrier]
+package = "action"
+filename = "CHANGELOG.rst"
+directory = "changelog/"
+title_format = "{version} - {project_date}"
