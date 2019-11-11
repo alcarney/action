@@ -50,7 +50,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ steps.info.VERSION }}
-        release_name: v$${{ steps.info.VERSION}} - ${{ steps.info.RELEASE_DATE }}
+        tag_name: v${{ steps.info.outputs.VERSION }}
+        release_name: v${{ steps.info.outputs.VERSION}} - ${{ steps.info.outputs.RELEASE_DATE }}
         draft: true
         prerelease: false
