@@ -112,3 +112,16 @@ jobs:
         asset_path: dist/${{ steps.pkg.outputs.SRC }}
         asset_name: ${{ steps.pkg.outputs.SRC }}
         asset_content_type: application/octet-stream  
+      
+    - name: Upload Release Notes
+      run: |
+        # POST a new ref to repo via Github API
+        curl -s -X PATCH https://api.github.com/repos/alcarney/action/releases/${{ release.outputs.id }} \
+        -H "Authorization: token $GITHUB_TOKEN" \
+        -d @- << EOF
+        {
+          "body": "These are my release notes"
+        }
+        EOF
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
