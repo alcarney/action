@@ -1,6 +1,10 @@
 name: Create Release
 
-on: [push]
+on:
+  push:
+    branches: 
+    - master
+    - develop
 
 jobs:
   build:
@@ -8,10 +12,17 @@ jobs:
     steps:
     - uses: actions/checkout@v1
       
-    - name: Export version 
+    - name: Export version
+      id: info
       run: |
          version=$(sed 's/.*"\(.*\)".*/\1/' _version.py)
+         release_date=$(date +%Y-%m-%d)
+         
          echo "::set-env name=VERSION::$version"
+         echo "::set-output name=VERSION::$version"
+         
+         echo "::set-env name=RELEASE_DATE::$release_date"
+         echo "::set-output name=RELEASE_DATE::$release_date"
          
     - name: Print version
       run: |
@@ -33,3 +44,13 @@ jobs:
         EOF
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Release
+      uses: actions/create-release@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.info.outputs.VERSION }}
+        release_name: v${{ steps.info.outputs.VERSION}} - ${{ steps.info.outputs.RELEASE_DATE }}
+        draft: true
+        prerelease: false
