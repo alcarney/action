@@ -27,7 +27,7 @@ jobs:
         -H "Authorization: token $GITHUB_TOKEN" \
         -d @- << EOF
         {
-          "ref": "refs/tags/v$version",
+          "ref": "refs/tags/v$VERSION",
           "sha": "$commit"
         }
         EOF
