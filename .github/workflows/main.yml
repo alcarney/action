@@ -1,4 +1,4 @@
-name: Create Env Variable
+name: Create Release
 
 on: [push]
 
@@ -16,3 +16,20 @@ jobs:
     - name: Print version
       run: |
         echo $VERSION
+        
+      # Based on: https://itnext.io/creating-a-github-action-to-tag-commits-2722f1560dec
+    - name: Create Tag
+      run: | 
+        commit=$(git rev-parse HEAD)
+        
+        # POST a new ref to repo via Github API
+        curl -s -X POST https://api.github.com/repos/alcarney/action/git/refs \
+        -H "Authorization: token $GITHUB_TOKEN" \
+        -d @- << EOF
+        {
+          "ref": "refs/tags/v$version",
+          "sha": "$commit"
+        }
+        EOF
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
