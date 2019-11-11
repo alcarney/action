@@ -1,0 +1,4 @@
+[tool.towncrier]
+package = "action"
+filename = "CHANGELOG.rst"
+directory = "changelog/"
