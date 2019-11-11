@@ -44,6 +44,7 @@ jobs:
         tox
         
     - name: Export Assets
+      id: pkg
       run: |
         whl=$(find dist/ -name '*.whl' -exec basename {} \;)
         echo "::set-output name=WHL::$whl"
