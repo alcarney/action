@@ -44,7 +44,7 @@ jobs:
     - name: Create Release
       uses: actions/create-release@v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ steps.info.VERSION }}
         release_name: v$${{ steps.info.VERSION}} - ${{ steps.info.RELEASE_DATE }}
