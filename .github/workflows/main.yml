@@ -1,0 +1,18 @@
+name: Create Env Variable
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+      
+    - name: Export version 
+      run: |
+         version=$(sed 's/.*"\(.*\)".*/\1/' _version.py)
+         echo "::set-env name=VERSION::$version"
+         
+    - name: Print version
+      run: |
+        echo $VERSION
