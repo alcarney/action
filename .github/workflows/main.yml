@@ -115,9 +115,9 @@ jobs:
           
     - name: Upload Release Notes
       run: |
-        python -m pip install towncrier
-        towncrier --draft >> release-notes.rst
-        notes=$(cat release-notes.rst)
+        python -m pip install towncrier docutils
+        towncrier --draft | rst2html - release-notes.html
+        notes=$(cat release-notes.html)
         
         echo $notes 
         
