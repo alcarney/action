@@ -54,7 +54,7 @@ jobs:
         
     - name: Build package
       run: |
-        tox
+        tox -e pkg
         
     - name: Export Assets
       id: pkg
@@ -112,15 +112,19 @@ jobs:
         asset_path: dist/${{ steps.pkg.outputs.SRC }}
         asset_name: ${{ steps.pkg.outputs.SRC }}
         asset_content_type: application/octet-stream  
-      
+          
     - name: Upload Release Notes
       run: |
+        python -m pip install towncrier
+        towncrier --draft >> release-notes.rst
+        notes=$(cat release-notes.rst)
+        
         # POST a new ref to repo via Github API
         curl -s -X PATCH https://api.github.com/repos/alcarney/action/releases/${{ steps.release.outputs.id }} \
         -H "Authorization: token $GITHUB_TOKEN" \
         -d @- << EOF
         {
-          "body": "These are my release notes"
+          "body": "$notes"
         }
         EOF
       env:
