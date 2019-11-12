@@ -119,6 +119,8 @@ jobs:
         towncrier --draft >> release-notes.rst
         notes=$(cat release-notes.rst)
         
+        echo $notes 
+        
         # POST a new ref to repo via Github API
         curl -s -X PATCH https://api.github.com/repos/alcarney/action/releases/${{ steps.release.outputs.id }} \
         -H "Authorization: token $GITHUB_TOKEN" \
