@@ -115,7 +115,6 @@ jobs:
 
     - name: Upload Release Notes
       run: |
-        set -e
         python -m pip install towncrier docutils
 
         ./scripts/write-release-notes.sh > release-notes.html
