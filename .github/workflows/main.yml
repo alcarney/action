@@ -115,9 +115,10 @@ jobs:
 
     - name: Upload Release Notes
       run: |
+        set -e
         python -m pip install towncrier docutils
 
-        towncrier --draft | rst2html.py --template=changelog/github-template.html | tr -d '\n' > release-notes.html
+        ./scripts/write-release-notes.sh > release-notes.html
         notes=$(cat release-notes.html)
 
         echo $notes
