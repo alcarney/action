@@ -13,5 +13,6 @@
 towncrier --draft | rst2html.py --template=changelog/github-template.html \
                   | tr -d '\n' \
                   | sed 's/ class="[^"]*"//g' \
-                  | sed 's/ id="[^"]*"//g'   # > release-notes.html
+                  | sed 's/ id="[^"]*"//g' \
+                  | sed 's.".\\".g'
 
