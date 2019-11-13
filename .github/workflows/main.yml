@@ -117,7 +117,7 @@ jobs:
       run: |
         python -m pip install towncrier docutils
 
-        towncrier --draft | rst2html.py --template=changelog/github-template.txt > release-notes.html
+        towncrier --draft | rst2html.py --template=changelog/github-template.html > release-notes.html
         notes=$(cat release-notes.html)
 
         echo $notes
