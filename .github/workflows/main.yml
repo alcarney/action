@@ -114,8 +114,8 @@ jobs:
         asset_content_type: application/octet-stream
 
     - name: Upload Release Notes
+      shell: bash
       run: |
-        set -e
         python -m pip install towncrier docutils
 
         ./scripts/write-release-notes.sh > release-notes.html
