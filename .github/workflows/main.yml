@@ -52,4 +52,6 @@ jobs:
 
         gh release create --target "v${VERSION}" ./dist/*
       name: Create Release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
