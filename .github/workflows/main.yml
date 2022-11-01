@@ -39,9 +39,18 @@ jobs:
         tox -e pkg
 
     - run: |
+
+        # Write the release notes
+        python -m towncrier --draft > .changes.md
+
+        # Write the changelog
+        python -m towncrier --yes
+
         # Setup git, commit, tag and push all the changes.
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config user.name "github-actions[bot]"
+
+        git commit -am 'Changelog v${VERSION}'
 
         # Other stages may have run before this, make sure we have the latest
         git pull --rebase origin release
@@ -50,7 +59,7 @@ jobs:
         git push origin release
         git push origin --tags
 
-        gh release create "v${VERSION}" ./dist/*
+        gh release create "v${VERSION}" --title "Action v${VERSION} - ${RELEASE_DATE}" -F .changes.md ./dist/*
       name: Create Release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
