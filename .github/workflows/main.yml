@@ -27,11 +27,8 @@ jobs:
          version=$(sed 's/.*"\(.*\)".*/\1/' action/_version.py)
          release_date=$(date +%Y-%m-%d)
 
-         echo "::set-env name=VERSION::$version"
-         echo "::set-output name=VERSION::$version"
-
-         echo "::set-env name=RELEASE_DATE::$release_date"
-         echo "::set-output name=RELEASE_DATE::$release_date"
+         echo "VERSION=$version" >> $GITHUB_ENV
+         echo "RELEASE_DATE=$release_date" >> $GITHUB_ENV
 
     - name: Print version
       run: |
