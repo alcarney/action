@@ -31,4 +31,4 @@ jobs:
         echo "pip install ${ESBONIO_WHL}"
       name: Install
       env:
-        ESBONIO_WHL: ${{ case(needs.lsp-release.outputs.version), format("esbonio=={1}", needs.lsp-release.outputs.version, "esbonio") }}
+        ESBONIO_WHL: "${{ case(needs.lsp-release.outputs.version, format('esbonio=={0}', needs.lsp-release.outputs.version), 'esbonio') }}"
