@@ -24,6 +24,7 @@ jobs:
   build-vsix:
     needs: [lsp-release]
     if: |
+      always() && 
       (needs.lsp-release.result == 'success' || needs.lsp-release.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
